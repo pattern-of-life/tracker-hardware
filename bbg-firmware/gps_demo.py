@@ -77,7 +77,7 @@ while True:
         # lng = str(float(lng) /100)
         print(convert(lat, lat_ns, lng, lng_ew))
         print"Time:",t,"Fix status:",fix,"Sats in view:",sats,"Altitude",alt,"Lat:",lat,lat_ns,"Long:",lng,lng_ew
-        # s=str(t)+","+str(float(lat)/100)+","+str(float(long)/100)+"\n"
+        # s=str(t)+","+str(float(lat)1/100)+","+str(float(long)/100)+"\n"
         # f.write(s)    #Save to file
         time.sleep(2)
     except IndexError:

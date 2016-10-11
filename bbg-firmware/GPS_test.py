@@ -1,20 +1,8 @@
 from GSM import setup_serial, send_command, parse_response, close_serial
 from time import sleep
 
-if __name__ == "__main__":
 
-    ser = setup_serial()
-    commands = []
-    commands.append(b'AT')
-    commands.append(b'AT+CBC')
-    commands.append(b'AT+CGNSPWR?')
-    commands.append(b'AT+CGNSSEQ?')
-    commands.append(b'AT+CGNSSEQ=?')
-    commands.append(b'AT+CGNSSEQ=GGA')
-    commands.append(b'AT+CGNSINF')
-
-
-
+def handle_commands(ser, commands):
     for com in commands:
         response = send_command(ser, com)
         print(response)
@@ -26,7 +14,7 @@ if __name__ == "__main__":
                 sleep(3)
                 response = send_command(ser, b'AT+HTTPREAD')
                 print('Index of ACTION: {}'.format(response[0].find('ACTION:')))
-                print(response)
+                # print(response)
                 count -= 1
 
             else:
@@ -37,6 +25,46 @@ if __name__ == "__main__":
                 sleep(1)
                 print("Resending command: {}".format(com))
                 response = send_command(ser, com)
-                print(response)
+                # print(response)
+    return response
+
+
+def parse_gps():
+    """ parse the CGNSINF response
+    ('AT+CGNSINF\r\n+CGNSINF: 1,1,20161011222856.000,47.618717,-122.351538,38.000,0.80,328.3,1,,1.6,2.5,1.9,,11,8,,,38,,\r\n\r\nOK\r\n', 11)
+    """
+    word = "('AT+CGNSINF\r\n+CGNSINF: 1,1,20161011222856.000,47.618717,-122.351538,38.000,0.80,328.3,1,,1.6,2.5,1.9,,11,8,,,38,,\r\n\r\nOK\r\n', 11)"
+
+    split_word = word.split(':')
+    split_word = split_word[1].split('\r\n')
+    split_word = split_word[0].split(',', )
+    sw = split_word
+    # print("Datetime: {} Lat: {} Lng: {} Alt: {} Speed: {} Course: {}"
+    #       .format(sw[2], sw[3], sw[4], sw[5], sw[6], sw[7]))
+
+    return split_word
+
+if __name__ == "__main__":
+
+    ser = setup_serial()
+    commands = []
+    commands.append(b'AT')
+    commands.append(b'AT+CBC')
+    commands.append(b'AT+CGNSPWR?')
+    commands.append(b'AT+CGNSPWR=1')
+    commands.append(b'AT+CGNSSEQ?')
+    commands.append(b'AT+CGNSSEQ=?')
+    commands.append(b'AT+CGNSSEQ=GGA')
+
+    handle_commands(ser, commands)
+
+    commands = []
+    commands.append(b'AT+CGNSINF')
+    while True:
+        word = handle_commands(ser, commands)
+        sw = parse_gps(word)
+        print("Datetime: {} Lat: {} Lng: {} Alt: {} Speed: {} Course: {}"
+              .format(sw[2], sw[3], sw[4], sw[5], sw[6], sw[7]))
+        sleep(30)
 
     close_serial(ser)

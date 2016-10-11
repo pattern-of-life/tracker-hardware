@@ -35,6 +35,12 @@ def send_command(ser, com):
         return response, bytes_sent
 
 
+def parse_response(resp):
+    """split the response up by commas"""
+    response_list = resp[0].split(',')
+    return response_list
+
+
 def close_serial(ser):
     ser.close()
 
@@ -52,14 +58,31 @@ if __name__ == "__main__":
     commands.append(b'AT+HTTPPARA="URL","http://ec2-52-33-25-11.us-west-2.compute.amazonaws.com/"')
     commands.append(b'AT+HTTPACTION=0')
     commands.append(b'AT+HTTPREAD')
-    commands.append(b'AT+HTTPREAD')
+    commands.append(b'AT+HTTPTERM')
+
 
     for com in commands:
         response = send_command(ser, com)
         print(response)
-        if 'ERROR' in response:
-            response = send_command(ser, com)
-            print(response)
-    # print(send_command(ser, b'AT+CBC'))
-    # print(send_command(ser, ''))
+
+        count = 1
+        while count:
+            if com == b'AT+HTTPREAD':
+                print("Last command was: AT+HTTPREAD")
+                sleep(3)
+                response = send_command(ser, b'AT+HTTPREAD')
+                print('Index of ACTION: {}'.format(response[0].find('ACTION:')))
+                print(response)
+                count -= 1
+
+            else:
+                break
+
+        for i in response:
+            if type(i) == str and 'ERROR' in i:
+                sleep(1)
+                print("Resending command: {}".format(com))
+                response = send_command(ser, com)
+                print(response)
+
     close_serial(ser)

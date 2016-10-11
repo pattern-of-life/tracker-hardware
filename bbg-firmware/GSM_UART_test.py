@@ -25,7 +25,6 @@ if ser.isOpen():
         if data == '':
             break
 
-
     print(response)
 
 ser.close()

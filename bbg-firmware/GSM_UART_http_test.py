@@ -7,7 +7,7 @@ import time
 
 def send_commands(commands):
     """opens a serial connection and returns it"""
-    ser = serial.Serial(port="/dev/ttyO2", baudrate=9600, timeout=2)
+    ser = serial.Serial(port="/dev/ttyO2", baudrate=9600, timeout=1)
     ser.close()
     time.sleep(0.1)
     ser.open()
@@ -37,9 +37,11 @@ def send_commands(commands):
 commands = []
 commands.append(b'AT')
 commands.append(b'AT')
-commands.append(b'AT')
-commands.append(b'AT+SAPBR=3,1,"Contype","GPRS"')
-commands.append(b'AT+SAPBR=3,1,"APN","www"')
-commands.append(b'AT+SAPBR=1,1')
-commands.append(b'AT+SAPBR=2,1')
+commands.append(b'AT+CGNSPWR?')
+
+# commands.append(b'AT')
+# commands.append(b'AT+SAPBR=3,1,"Contype","GPRS"')
+# commands.append(b'AT+SAPBR=3,1,"APN","www"')
+# commands.append(b'AT+SAPBR=1,1')
+# commands.append(b'AT+SAPBR=2,1')
 send_commands(commands)

@@ -1,4 +1,4 @@
-""" This is my library file """
+""" FONA SIM808 library"""
 from serial import Serial
 from time import sleep
 
@@ -12,9 +12,6 @@ def setup_serial():
     sleep(0.1)
 
     return ser
-
-
-
 
 
 def parse_response(resp):

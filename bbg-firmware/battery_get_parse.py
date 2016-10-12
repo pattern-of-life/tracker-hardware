@@ -34,7 +34,7 @@ def parse_battery(word):
     ('AT+CBC\r\n+CBC: 0,69,3956\r\n\r\nOK\r\n', 7)
     """
 
-    word = "('AT+CBC\r\n+CBC: 0,69,3956\r\n\r\nOK\r\n', 7)"
+    # word = "('AT+CBC\r\n+CBC: 0,69,3956\r\n\r\nOK\r\n', 7)"
 
     if '+CBC' in word:
         split_word = word.split(':')
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     commands.append(b'AT+CBC')
     count = 30
     while count:
-        word = handle_commands(ser, commands)
+        word, bytes_sent = handle_commands(ser, commands)
         sw = parse_battery(word)
         print("Battery %: {} Voltage: {}".format(sw[1], float(sw[2]) / 1000))
         sleep(10)

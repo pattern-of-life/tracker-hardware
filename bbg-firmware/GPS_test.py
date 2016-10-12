@@ -60,9 +60,9 @@ if __name__ == "__main__":
 
     commands = []
     commands.append(b'AT+CGNSINF')
-    count = 30
+    count = 28
     while count:
-        word = handle_commands(ser, commands)
+        word, bytes_sent = handle_commands(ser, commands)
         sw = parse_gps(word)
         print("Datetime: {} Lat: {} Lng: {} Alt: {} Speed: {} Course: {}"
               .format(sw[2], sw[3], sw[4], sw[5], sw[6], sw[7]))

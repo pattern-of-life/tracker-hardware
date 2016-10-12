@@ -42,20 +42,29 @@ def close_serial(ser):
     ser.close()
 
 
-def parse_gps(word):
-    """ parse the CGNSINF response
+def gps_get_data(word):
+    """parse and return just the data we want"""
+    sw = word.split(':')
+    sw = sw[1].split('\r\n')
+    sw = sw[0].split(',', )
+    return sw[2], sw[3], sw[4], sw[5]
+
+
+def gps_parse_raw(word):
+    """ parse the CGNSINF response into a list of values
     ('AT+CGNSINF\r\n+CGNSINF: 1,1,20161011222856.000,47.618717,-122.351538,38.000,0.80,328.3,1,,1.6,2.5,1.9,,11,8,,,38,,\r\n\r\nOK\r\n', 11)
     """
     split_word = word.split(':')
     split_word = split_word[1].split('\r\n')
     split_word = split_word[0].split(',', )
-    sw = split_word
+    # sw = split_word
     # print("Datetime: {} Lat: {} Lng: {} Alt: {} Speed: {} Course: {}"
     #       .format(sw[2], sw[3], sw[4], sw[5], sw[6], sw[7]))
     return split_word
 
 
-def read_gps_datetime(datetime_str):
+def gps_format_datetime(datetime_str):
+    """convert CGNS GGA date time into format for REST post"""
     year = datetime_str[:4]
     month = datetime_str[4:6]
     day = datetime_str[6:8]
@@ -63,13 +72,27 @@ def read_gps_datetime(datetime_str):
     minutes = datetime_str[10:12]
     seconds = datetime_str[12:14]
     return '{}/{}/{} {}:{}:{}'.format(
-        year, month, day, hours, minutes, seconds
+        month, day, year, hours, minutes, seconds
     )
 
 
-def get_gps_data():
-    """ Get data from the GPS """
-    
+def gps_setup():
+    """ Set up the GPS on the SIM808 """
+    commands = []
+    commands.append(b'AT')
+    commands.append(b'AT+CBC')
+    commands.append(b'AT+CGNSPWR?')
+    commands.append(b'AT+CGNSPWR=1')
+    commands.append(b'AT+CGNSSEQ?')
+    commands.append(b'AT+CGNSSEQ=?')
+    commands.append(b'AT+CGNSSEQ=GGA')
+    return commands
+
+
+def gps_get_point():
+    """ Get a gps data point """
+    commands = ['AT+CGNSINF']
+    return commands
 
 
 def handle_commands(ser, commands):

@@ -56,7 +56,8 @@ if __name__ == "__main__":
         time = gps_format_datetime(time)
         url = 'http://ec2-52-35-206-130.us-west-2.compute.amazonaws.com/device/data/create'
         payload = 'uuid={}&time={}&lat={}&lng={}&elevation={}'.format(uuid, time, lat, lng, el)
-        print('\n\nPayload: {}\n\n'.format(payload))
+        print('\n\nPayload: {}'.format(payload))
+        print('Count: {}\n\n'.forma(count))
         handle_commands(ser, http_send_post(url, payload))
         sleep(20)
         count -= 1

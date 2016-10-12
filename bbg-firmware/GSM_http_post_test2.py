@@ -2,6 +2,7 @@ from serial import Serial
 from time import sleep
 from GSM import setup_serial, send_command, close_serial
 from GSM import handle_commands, gps_setup, gps_get_data, gps_get_point
+from GSM import gps_format_datetime
 
 
 def www_open_connection():
@@ -33,6 +34,7 @@ def http_send_post(url, payload):
     commands.append('AT+HTTPDATA={},10000'.format(length))
     commands.append(payload)
     commands.append('AT+HTTPTERM')
+    return commands
 
 
 if __name__ == "__main__":
@@ -43,7 +45,7 @@ if __name__ == "__main__":
     handle_commands(ser, gps_setup())
     word, bytes_sent = handle_commands(ser, gps_get_point())
     time, lat, lng, el = gps_get_data(word)
-
+    time = gps_format_datetime(time)
     url = 'http://ec2-52-35-206-130.us-west-2.compute.amazonaws.com/device/data/create/'
     payload = 'uuid={}&time={}&lat={}&lng={}&elevation={}'.format(uuid, time, lat, lng, el)
 

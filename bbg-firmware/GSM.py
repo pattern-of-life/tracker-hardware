@@ -79,13 +79,13 @@ def gps_format_datetime(datetime_str):
 def gps_setup():
     """ Set up the GPS on the SIM808 """
     commands = []
-    commands.append(b'AT')
-    commands.append(b'AT+CBC')
-    commands.append(b'AT+CGNSPWR?')
-    commands.append(b'AT+CGNSPWR=1')
-    commands.append(b'AT+CGNSSEQ?')
-    commands.append(b'AT+CGNSSEQ=?')
-    commands.append(b'AT+CGNSSEQ=GGA')
+    commands.append('AT')
+    commands.append('AT+CBC')
+    commands.append('AT+CGNSPWR?')
+    commands.append('AT+CGNSPWR=1')
+    commands.append('AT+CGNSSEQ?')
+    commands.append('AT+CGNSSEQ=?')
+    commands.append('AT+CGNSSEQ=GGA')
     return commands
 
 

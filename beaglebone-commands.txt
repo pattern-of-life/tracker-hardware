@@ -1,0 +1,59 @@
+# Beaglebone Login
+
+```ssh root@192.168.7.2```
+
+```
+df 		# disk free
+ssh-keygen -f "/home/banksd/.ssh/known_hosts" -R 192.168.7.2 		 # to reset ssh
+
+root@beaglebone:~# cat /etc/*-release
+PRETTY_NAME="Debian GNU/Linux 7 (wheezy)"
+NAME="Debian GNU/Linux"
+VERSION_ID="7"
+VERSION="7 (wheezy)"
+ID=debian
+ANSI_COLOR="1;31"
+HOME_URL="http://www.debian.org/"
+SUPPORT_URL="http://www.debian.org/support/"
+BUG_REPORT_URL="http://bugs.debian.org/"
+
+```
+
+- need to set up a user
+- need to make it so you cannot ssh to root
+- need a root password
+- Beagle Bone Green root password: *************
+- Beagle Bone Green debian password: ************
+
+```
+passwd		# to change password
+```
+- default username:password is [debian:temppwd]
+
+### shutdown
+
+```sudo shutdown -hP now```
+
+
+## installing
+```
+sudo apt-get install python3
+sudo apt-get install pip
+sudo pip install virtualenv
+python3 -m virtualenv ./
+```
+
+## Cloud9
+
+http://192.168.7.2:3000/ide.html
+
+## Connecting to Wifi
+
+https://learn.adafruit.com/setting-up-wifi-with-beaglebone-black/configuration
+
+```
+$ sudo pico /etc/network/interfaces
+$ ifup wlan0
+$ ifconfig				# to view network status
+
+```

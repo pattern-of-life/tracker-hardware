@@ -29,20 +29,20 @@ def handle_commands(ser, commands):
     return response
 
 
-def parse_gps(word):
-    """ parse the CGNSINF response
-    ('AT+CGNSINF\r\n+CGNSINF: 1,1,20161011222856.000,47.618717,-122.351538,38.000,0.80,328.3,1,,1.6,2.5,1.9,,11,8,,,38,,\r\n\r\nOK\r\n', 11)
+def parse_battery(word):
+    """ parse the CBC battery response
+    ('AT+CBC\r\n+CBC: 0,55,3841', 11)
     """
-    # word = "('AT+CGNSINF\r\n+CGNSINF: 1,1,20161011222856.000,47.618717,-122.351538,38.000,0.80,328.3,1,,1.6,2.5,1.9,,11,8,,,38,,\r\n\r\nOK\r\n', 11)"
+    if '+CBC' in word:
+        # word = "('AT+CBC\r\n+CBC: 0,55,3841\r\n', 11)""
 
-    split_word = word.split(':')
-    split_word = split_word[1].split('\r\n')
-    split_word = split_word[0].split(',', )
-    sw = split_word
-    # print("Datetime: {} Lat: {} Lng: {} Alt: {} Speed: {} Course: {}"
-    #       .format(sw[2], sw[3], sw[4], sw[5], sw[6], sw[7]))
+        split_word = word.split(':')
+        split_word = split_word[1].split('\r\n')
+        split_word = split_word[0].split(',', )
+        sw = split_word
+        print("Battery %: {} Voltage:{}".format(sw[2], sw[3]))
 
-    return split_word
+        return split_word
 
 if __name__ == "__main__":
 
@@ -50,23 +50,17 @@ if __name__ == "__main__":
     commands = []
     commands.append(b'AT')
     commands.append(b'AT+CBC')
-    commands.append(b'AT+CGNSPWR?')
-    commands.append(b'AT+CGNSPWR=1')
-    commands.append(b'AT+CGNSSEQ?')
-    commands.append(b'AT+CGNSSEQ=?')
-    commands.append(b'AT+CGNSSEQ=GGA')
 
     handle_commands(ser, commands)
 
     commands = []
-    commands.append(b'AT+CGNSINF')
+    commands.append(b'AT+CBC')
     count = 30
     while count:
         word = handle_commands(ser, commands)
-        sw = parse_gps(word)
-        print("Datetime: {} Lat: {} Lng: {} Alt: {} Speed: {} Course: {}"
-              .format(sw[2], sw[3], sw[4], sw[5], sw[6], sw[7]))
-        sleep(30)
+        sw = parse_battery(word)
+        print("Battery %: {} Voltage:{}".format(sw[2], sw[3]))
+        sleep(10)
         count -= 1
 
     close_serial(ser)

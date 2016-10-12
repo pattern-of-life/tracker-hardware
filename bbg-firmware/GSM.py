@@ -98,16 +98,16 @@ def gps_get_point():
 def handle_commands(ser, commands):
     for com in commands:
         response = send_command(ser, com)
-        # print(response)
+        print(response)
 
         count = 1
         while count:
-            if com == b'AT+HTTPREAD':
+            if com == 'AT+HTTPREAD':
                 print("Last command was: AT+HTTPREAD")
                 sleep(3)
-                response = send_command(ser, b'AT+HTTPREAD')
+                response = send_command(ser, 'AT+HTTPREAD')
                 print('Index of ACTION: {}'.format(response[0].find('ACTION:')))
-                # print(response)
+                print(response)
                 count -= 1
 
             else:
@@ -118,6 +118,6 @@ def handle_commands(ser, commands):
                 sleep(1)
                 print("Resending command: {}".format(com))
                 response = send_command(ser, com)
+                print(response)
 
-    print(response)
     return response

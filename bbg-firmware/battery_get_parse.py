@@ -31,27 +31,30 @@ def handle_commands(ser, commands):
 
 def parse_battery(word):
     """ parse the CBC battery response
-    ('AT+CBC\r\n+CBC: 0,55,3841', 11)
+    ('AT+CBC\r\n+CBC: 0,69,3956\r\n\r\nOK\r\n', 7)
     """
-    if '+CBC' in word:
-        # word = "('AT+CBC\r\n+CBC: 0,55,3841\r\n', 11)""
 
+    word = "('AT+CBC\r\n+CBC: 0,69,3956\r\n\r\nOK\r\n', 7)"
+
+    if '+CBC' in word:
         split_word = word.split(':')
         split_word = split_word[1].split('\r\n')
         split_word = split_word[0].split(',', )
         sw = split_word
-        print("Battery %: {} Voltage:{}".format(sw[2], sw[3]))
+        # print("Battery %: {} Voltage: {}".format(sw[1], float(sw[2]) / 1000))
 
         return split_word
 
 if __name__ == "__main__":
+
+    parse_battery('')
 
     ser = setup_serial()
     commands = []
     commands.append(b'AT')
     commands.append(b'AT+CBC')
 
-    handle_commands(ser, commands)
+    print(handle_commands(ser, commands))
 
     commands = []
     commands.append(b'AT+CBC')
@@ -59,7 +62,7 @@ if __name__ == "__main__":
     while count:
         word = handle_commands(ser, commands)
         sw = parse_battery(word)
-        print("Battery %: {} Voltage:{}".format(sw[2], sw[3]))
+        print("Battery %: {} Voltage: {}".format(sw[1], float(sw[2]) / 1000))
         sleep(10)
         count -= 1
 

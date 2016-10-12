@@ -20,6 +20,7 @@ def www_open_connection():
 def www_close_connection():
     """close the www connection"""
     commands = ['AT+SAPBR=0,1']
+    commands.append('AT+SAPBR=2,1')
     return commands
 
 

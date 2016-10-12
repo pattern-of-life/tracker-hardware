@@ -48,7 +48,7 @@ if __name__ == "__main__":
     time = gps_format_datetime(time)
     url = 'http://ec2-52-35-206-130.us-west-2.compute.amazonaws.com/device/data/create/'
     payload = 'uuid={}&time={}&lat={}&lng={}&elevation={}'.format(uuid, time, lat, lng, el)
-    print('Payload: {}'.format(payload))
+    print('\n\nPayload: {}\n\n'.format(payload))
     handle_commands(ser, www_open_connection())
     handle_commands(ser, http_send_post(url, payload))
     handle_commands(ser, www_close_connection())

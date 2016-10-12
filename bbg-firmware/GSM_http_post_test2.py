@@ -34,6 +34,7 @@ def http_send_post(url, payload):
     commands.append('AT+HTTPPARA="CONTENT","application/x-www-form-urlencoded"')
     commands.append('AT+HTTPDATA={},10000'.format(length))
     commands.append(payload)
+    commands.append('AT+HTTPACTION=1')
     commands.append('AT+HTTPTERM')
     return commands
 

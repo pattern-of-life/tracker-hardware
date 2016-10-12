@@ -32,6 +32,9 @@ def gps_get_data(word):
     sw = word.split(':')
     sw = sw[1].split('\r\n')
     sw = sw[0].split(',', )
+    sw[3] = str(sw[3]).replace('.', '%2E')
+    sw[4] = str(sw[4]).replace('.', '%2E')
+    sw[5] = str(sw[5]).replace('.', '%2E')
     return sw[2], sw[3], sw[4], sw[5]
 
 
@@ -56,7 +59,7 @@ def gps_format_datetime(datetime_str):
     hours = datetime_str[8:10]
     minutes = datetime_str[10:12]
     seconds = datetime_str[12:14]
-    return '{}/{}/{} {}:{}:{}'.format(
+    return '{}%2F{}%2F{}+{}%3A{}%3A{}'.format(
         month, day, year, hours, minutes, seconds
     )
 

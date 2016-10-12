@@ -33,7 +33,7 @@ def parse_gps(word):
     """ parse the CGNSINF response
     ('AT+CGNSINF\r\n+CGNSINF: 1,1,20161011222856.000,47.618717,-122.351538,38.000,0.80,328.3,1,,1.6,2.5,1.9,,11,8,,,38,,\r\n\r\nOK\r\n', 11)
     """
-    word = "('AT+CGNSINF\r\n+CGNSINF: 1,1,20161011222856.000,47.618717,-122.351538,38.000,0.80,328.3,1,,1.6,2.5,1.9,,11,8,,,38,,\r\n\r\nOK\r\n', 11)"
+    # word = "('AT+CGNSINF\r\n+CGNSINF: 1,1,20161011222856.000,47.618717,-122.351538,38.000,0.80,328.3,1,,1.6,2.5,1.9,,11,8,,,38,,\r\n\r\nOK\r\n', 11)"
 
     split_word = word.split(':')
     split_word = split_word[1].split('\r\n')
@@ -43,6 +43,18 @@ def parse_gps(word):
     #       .format(sw[2], sw[3], sw[4], sw[5], sw[6], sw[7]))
 
     return split_word
+
+
+def read_gps_datetime(datetime_str):
+    year = datetime_str[:4]
+    month = datetime_str[4:6]
+    day = datetime_str[6:8]
+    hours = datetime_str[8:10]
+    minutes = datetime_str[10:12]
+    seconds = datetime_str[12:14]
+    return '{}/{}/{} {}:{}:{}'.format(
+        year, month, day, hours, minutes, seconds
+    )
 
 if __name__ == "__main__":
 
@@ -60,9 +72,9 @@ if __name__ == "__main__":
 
     commands = []
     commands.append(b'AT+CGNSINF')
-    count = 30
+    count = 28
     while count:
-        word = handle_commands(ser, commands)
+        word, bytes_sent = handle_commands(ser, commands)
         sw = parse_gps(word)
         print("Datetime: {} Lat: {} Lng: {} Alt: {} Speed: {} Course: {}"
               .format(sw[2], sw[3], sw[4], sw[5], sw[6], sw[7]))

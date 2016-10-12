@@ -14,22 +14,7 @@ def setup_serial():
     return ser
 
 
-def send_command(ser, com):
-    """ Send a Command to the SIM808 module
-        Returns response and the # bytes_sent """
-    data = ''
-    response = ''
 
-    if ser.isOpen():
-        bytes_sent = ser.write(com + b'\n')
-        sleep(0.1)
-        while True:
-            data = ser.readline()
-            sleep(0.1)
-            if data == '':
-                break
-            response += data
-        return response, bytes_sent
 
 
 def parse_response(resp):
@@ -95,8 +80,27 @@ def gps_get_point():
     return commands
 
 
+def send_command(ser, com):
+    """ Send a Command to the SIM808 module
+        Returns response and the # bytes_sent """
+    data = ''
+    response = ''
+
+    if ser.isOpen():
+        bytes_sent = ser.write(com + b'\n')
+        sleep(0.1)
+        while True:
+            data = ser.readline()
+            sleep(0.1)
+            if data == '':
+                break
+            response += data
+        return response, bytes_sent
+
+
 def handle_commands(ser, commands):
     for com in commands:
+        sleep(.5)
         response = send_command(ser, com)
         print(response)
 

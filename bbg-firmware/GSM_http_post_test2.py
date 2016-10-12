@@ -13,6 +13,7 @@ def www_open_connection():
     commands.append('AT+SAPBR=3,1,"APN","www"')
     commands.append('AT+SAPBR=1,1')
     commands.append('AT+SAPBR=2,1')
+    commands.append('AT+SAPBR=2,1')
     return commands
 
 

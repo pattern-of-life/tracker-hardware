@@ -44,6 +44,18 @@ def parse_gps(word):
 
     return split_word
 
+
+def read_gps_datetime(datetime_str):
+    year = datetime_str[:4]
+    month = datetime_str[4:6]
+    day = datetime_str[6:8]
+    hours = datetime_str[8:10]
+    minutes = datetime_str[10:12]
+    seconds = datetime_str[12:14]
+    return '{}/{}/{} {}:{}:{}'.format(
+        year, month, day, hours, minutes, seconds
+    )
+
 if __name__ == "__main__":
 
     ser = setup_serial()

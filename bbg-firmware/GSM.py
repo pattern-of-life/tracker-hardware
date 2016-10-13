@@ -92,12 +92,13 @@ def send_command(ser, com):
         sleep(0.1)
         while True:
             data = ser.readline()
+            print('Data: {}'.format(data))
             sleep(0.1)
             if data == '':
                 break
             response += data
 
-    print('Response: {}'.format(response))
+    # print('Response: {}'.format(response))
     return response, bytes_sent
 
 

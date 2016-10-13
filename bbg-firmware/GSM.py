@@ -32,7 +32,6 @@ def gps_get_data(word):
     sw = sw[1].split('\r\n')
     sw = sw[0].split(',', )
     for i in range(3, 6):
-        print(i)
         if sw[i] == '':
             sw[i] = 0
         else:

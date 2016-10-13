@@ -56,7 +56,8 @@ if __name__ == "__main__":
     handle_commands(ser, www_open_connection())
 
     count = 5
-    while count:
+    # while count:
+    for i in range(count)
 
         word, bytes_sent = handle_commands(ser, gps_get_point())
         time, lat, lng, el, valid_gps = gps_get_data(word)
@@ -73,9 +74,9 @@ if __name__ == "__main__":
             fff.write("{},{},{},{},{},{}\n".format(count, uuid, time, lat, lng, el))
             fff.close()
         else:
-            print("\nNo GPS\n")
+            print("\nNo GPS count: {}\n".format(count))
         sleep(20)
-        count -= 1
+        # count -= 1
 
     handle_commands(ser, www_close_connection())
     close_serial(ser)

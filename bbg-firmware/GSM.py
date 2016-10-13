@@ -25,7 +25,8 @@ def close_serial(ser):
 
 
 def gps_get_data(word):
-    """parse and return just the data we want"""
+    """Parse the CGNSINF response and return: time, lat, lng, elevation
+        in a HTTP REST request format"""
     sw = word.split(':')
     sw = sw[1].split('\r\n')
     sw = sw[0].split(',', )

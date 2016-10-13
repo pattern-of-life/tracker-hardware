@@ -3,6 +3,7 @@ from time import sleep
 from GSM import setup_serial, send_command, close_serial
 from GSM import handle_commands, gps_setup, gps_get_data, gps_get_point
 from GSM import gps_format_datetime
+import os
 
 
 def www_open_connection():
@@ -42,13 +43,19 @@ def http_send_post(url, payload):
 
 if __name__ == "__main__":
 
+    log_path = '/media/card/tracker/'
+    file_name = 'tracker_log.csv'
+    file_path = os.path.join(log_path, file_name)
+    fff = open(file_path, 'a')
+    fff.write("uuid, time, lat, lng, elevation\n")
+    fff.close()
     ser = setup_serial()
     uuid = '107639e9-043f-42a5-826d-32cc920667ae'
 
     handle_commands(ser, gps_setup())
     handle_commands(ser, www_open_connection())
 
-    count = 2
+    count = 5s
     while count:
 
         word, bytes_sent = handle_commands(ser, gps_get_point())
@@ -59,6 +66,9 @@ if __name__ == "__main__":
         print('\n\nPayload: {}'.format(payload))
         print('Count: {}\n\n'.forma(count))
         handle_commands(ser, http_send_post(url, payload))
+        fff = open(file_path, 'a')
+        fff.write("{},{},{},{},{}\n".format(uuid, time, lat, lng, el))
+        fff.close()
         sleep(20)
         count -= 1
 

@@ -55,7 +55,7 @@ if __name__ == "__main__":
     handle_commands(ser, gps_setup())
     handle_commands(ser, www_open_connection())
 
-    count = 5s
+    count = 5
     while count:
 
         word, bytes_sent = handle_commands(ser, gps_get_point())

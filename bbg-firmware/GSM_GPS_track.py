@@ -55,7 +55,7 @@ if __name__ == "__main__":
     handle_commands(ser, gps_setup())
     handle_commands(ser, www_open_connection())
 
-    count = 120
+    count = 10
     while count:
 
         word, bytes_sent = handle_commands(ser, gps_get_point())
@@ -69,7 +69,7 @@ if __name__ == "__main__":
         fff = open(file_path, 'a')
         fff.write("{},{},{},{},{}\n".format(uuid, time, lat, lng, el))
         fff.close()
-        sleep(30)
+        sleep(20)
         count -= 1
 
     handle_commands(ser, www_close_connection())

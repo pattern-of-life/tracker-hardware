@@ -5,7 +5,7 @@ from time import sleep
 
 def setup_serial():
     """ Setup serial connection """
-    ser = Serial(port="/dev/ttyO2", baudrate=9600, timeout=0)
+    ser = Serial(port="/dev/ttyO2", baudrate=57600, timeout=0)
     ser.close()
     sleep(0.1)
     ser.open()
@@ -95,6 +95,9 @@ def send_command(ser, com):
             if data == '':
                 break
             response += data
+
+
+        print(response)
         return response, bytes_sent
 
 
@@ -102,7 +105,7 @@ def handle_commands(ser, commands):
     for com in commands:
         sleep(.5)
         response = send_command(ser, com)
-        print(response)
+        # print(response)
 
         count = 1
         while count:
@@ -111,7 +114,7 @@ def handle_commands(ser, commands):
                 sleep(3)
                 response = send_command(ser, 'AT+HTTPREAD')
                 print('Index of ACTION: {}'.format(response[0].find('ACTION:')))
-                print(response)
+                # print(response)
                 count -= 1
 
             else:
@@ -122,6 +125,6 @@ def handle_commands(ser, commands):
                 sleep(1)
                 print("Resending command: {}".format(com))
                 response = send_command(ser, com)
-                print(response)
+                # print(response)
 
     return response

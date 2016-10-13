@@ -22,9 +22,10 @@ DESTINATION2 = 'http://ec2-52-33-25-11.us-west-2.compute.amazonaws.com/'
 
 def send_data_point(data, destination):
     """sends individual data points to our api."""
-    r = requests.post(destination, data=data)
-    print('Request sent, status code:', r.status_code)
-    print(r.content)
+    response = requests.post(destination, data=data)
+    import pdb; pdb.set_trace()
+    print('Request sent, status code:', response.status_code)
+    print(response.content)
 
 
 if __name__ == '__main__':

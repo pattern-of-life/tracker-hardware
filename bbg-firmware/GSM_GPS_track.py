@@ -66,8 +66,9 @@ if __name__ == "__main__":
         print('\n\nPayload: {}'.format(payload))
         print('Count: {}\n\n'.format(count))
         handle_commands(ser, http_send_post(url, payload))
+        print("Logging dat to file")
         fff = open(file_path, 'a')
-        fff.write("{},{},{},{},{}\n".format(uuid, time, lat, lng, el))
+        fff.write("{},{},{},{},{},{}\n".format(count, uuid, time, lat, lng, el))
         fff.close()
         sleep(20)
         count -= 1

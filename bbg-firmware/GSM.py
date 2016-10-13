@@ -96,9 +96,8 @@ def send_command(ser, com):
                 break
             response += data
 
-
-        print(response)
-        return response, bytes_sent
+    print('Response: {}'.format(response))
+    return response, bytes_sent
 
 
 def handle_commands(ser, commands):

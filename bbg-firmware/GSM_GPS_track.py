@@ -47,7 +47,7 @@ if __name__ == "__main__":
     file_name = 'tracker_log.csv'
     file_path = os.path.join(log_path, file_name)
     fff = open(file_path, 'a')
-    fff.write("uuid, time, lat, lng, elevation\n")
+    fff.write("count, uuid, time, lat, lng, elevation\n")
     fff.close()
     ser = setup_serial()
     uuid = '107639e9-043f-42a5-826d-32cc920667ae'
@@ -56,7 +56,6 @@ if __name__ == "__main__":
     handle_commands(ser, www_open_connection())
 
     count = 120
-    # while count:
     for i in range(count):
 
         word, bytes_sent = handle_commands(ser, gps_get_point())
@@ -71,12 +70,11 @@ if __name__ == "__main__":
             handle_commands(ser, http_send_post(url, payload))
             print("Logging dat to file")
             fff = open(file_path, 'a')
-            fff.write("{},{},{},{},{},{}\n".format(count, uuid, time, lat, lng, el))
+            fff.write("{},{},{},{},{},{}\n".format(i, uuid, time, lat, lng, el))
             fff.close()
         else:
             print("\nNo GPS count: {}\n".format(i))
-        sleep(30)
-        # count -= 1
+        sleep(20)
 
     handle_commands(ser, www_close_connection())
     close_serial(ser)

@@ -1,0 +1,11 @@
+[Unit]
+Description=GSM GPS tracker
+After=multi-user.target
+ConditionPathExists=|/media/card/tracker
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python /home/debian/tracker-hardware/bbg-firmware/GSM_GPS_track.py
+
+[Install]
+WantedBy=multi-user.target

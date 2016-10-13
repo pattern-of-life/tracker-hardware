@@ -13,6 +13,8 @@ WantedBy=multi-user.target
 
 #####################
 do not include below here in actual file
+#############
+run these commands to use this
 $ sudo pico /lib/systemd/system/tracker.service
 $ sudo chmod 644 /lib/systemd/system/tracker.service
 $ sudo systemctl daemon-reload

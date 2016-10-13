@@ -9,3 +9,13 @@ ExecStart=/usr/bin/python /home/debian/tracker-hardware/bbg-firmware/GSM_GPS_tra
 
 [Install]
 WantedBy=multi-user.target
+
+
+#####################
+do not include below here in actual file
+$ sudo pico /lib/systemd/system/tracker.service
+$ sudo chmod 644 /lib/systemd/system/tracker.service
+$ sudo systemctl daemon-reload
+$ sudo systemctl enable myscript.service
+$ sudo shutdown -r now
+$ sudo systemctl status myscript.service    # or stop start restart

@@ -6,7 +6,7 @@ if __name__ == "__main__":
 
     ser = setup_serial()
     commands = []
-    commands.append(b'AT')
+    commands.append('AT+CGPSPWR=0')
     handle_commands(ser, commands)
 
     close_serial(ser)

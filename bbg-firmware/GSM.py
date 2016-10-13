@@ -5,7 +5,7 @@ from time import sleep
 
 def setup_serial():
     """ Setup serial connection """
-    ser = Serial(port="/dev/ttyO2", baudrate=57600, timeout=0)
+    ser = Serial(port="/dev/ttyO2", baudrate=57600, timeout=1)
     ser.close()
     sleep(0.1)
     ser.open()

@@ -55,16 +55,16 @@ if __name__ == "__main__":
     handle_commands(ser, gps_setup())
     handle_commands(ser, www_open_connection())
 
-    count = 5
+    count = 120
     # while count:
-    for i in range(count)
+    for i in range(count):
 
         word, bytes_sent = handle_commands(ser, gps_get_point())
         time, lat, lng, el, valid_gps = gps_get_data(word)
         if valid_gps:
 
             time = gps_format_datetime(time)
-            url = 'http://ec2-52-35-206-130.us-west-2.compute.amazonaws.com/device/data/create'
+            url = 'http://ec2-54-191-114-88.us-west-2.compute.amazonaws.com/device/data/create'
             payload = 'uuid={}&time={}&lat={}&lng={}&elevation={}'.format(uuid, time, lat, lng, el)
             print('\n\nPayload: {}'.format(payload))
             print('Count: {}\n\n'.format(count))
@@ -74,8 +74,8 @@ if __name__ == "__main__":
             fff.write("{},{},{},{},{},{}\n".format(count, uuid, time, lat, lng, el))
             fff.close()
         else:
-            print("\nNo GPS count: {}\n".format(count))
-        sleep(20)
+            print("\nNo GPS count: {}\n".format(i))
+        sleep(30)
         # count -= 1
 
     handle_commands(ser, www_close_connection())

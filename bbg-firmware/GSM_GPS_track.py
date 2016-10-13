@@ -55,21 +55,25 @@ if __name__ == "__main__":
     handle_commands(ser, gps_setup())
     handle_commands(ser, www_open_connection())
 
-    count = 10
+    count = 5
     while count:
 
         word, bytes_sent = handle_commands(ser, gps_get_point())
-        time, lat, lng, el = gps_get_data(word)
-        time = gps_format_datetime(time)
-        url = 'http://ec2-52-35-206-130.us-west-2.compute.amazonaws.com/device/data/create'
-        payload = 'uuid={}&time={}&lat={}&lng={}&elevation={}'.format(uuid, time, lat, lng, el)
-        print('\n\nPayload: {}'.format(payload))
-        print('Count: {}\n\n'.format(count))
-        handle_commands(ser, http_send_post(url, payload))
-        print("Logging dat to file")
-        fff = open(file_path, 'a')
-        fff.write("{},{},{},{},{},{}\n".format(count, uuid, time, lat, lng, el))
-        fff.close()
+        time, lat, lng, el, valid_gps = gps_get_data(word)
+        if valid_gps:
+
+            time = gps_format_datetime(time)
+            url = 'http://ec2-52-35-206-130.us-west-2.compute.amazonaws.com/device/data/create'
+            payload = 'uuid={}&time={}&lat={}&lng={}&elevation={}'.format(uuid, time, lat, lng, el)
+            print('\n\nPayload: {}'.format(payload))
+            print('Count: {}\n\n'.format(count))
+            handle_commands(ser, http_send_post(url, payload))
+            print("Logging dat to file")
+            fff = open(file_path, 'a')
+            fff.write("{},{},{},{},{},{}\n".format(count, uuid, time, lat, lng, el))
+            fff.close()
+        else:
+            print("\nNo GPS\n")
         sleep(20)
         count -= 1
 

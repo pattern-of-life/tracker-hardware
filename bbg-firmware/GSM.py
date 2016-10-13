@@ -27,13 +27,18 @@ def close_serial(ser):
 def gps_get_data(word):
     """Parse the CGNSINF response and return: time, lat, lng, elevation
         in a HTTP REST request format"""
+    valid_gps = False
     sw = word.split(':')
     sw = sw[1].split('\r\n')
     sw = sw[0].split(',', )
-    sw[3] = str(sw[3]).replace('.', '%2E')
-    sw[4] = str(sw[4]).replace('.', '%2E')
-    sw[5] = str(sw[5]).replace('.', '%2E')
-    return sw[2], sw[3], sw[4], sw[5]
+    for i in range(3, 6):
+        print(i)
+        if sw[i] == '':
+            sw[i] = 0
+        else:
+            sw[i] = str(sw[i]).replace('.', '%2E')
+            valid_gps = True
+    return sw[2], sw[3], sw[4], sw[5], valid_gps
 
 
 def gps_parse_raw(word):

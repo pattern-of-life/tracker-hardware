@@ -3,6 +3,7 @@ from time import sleep
 from GSM import setup_serial, send_command, close_serial
 from GSM import handle_commands, gps_setup, gps_get_data, gps_get_point
 from GSM import gps_format_datetime
+import os
 
 
 def www_open_connection():
@@ -42,24 +43,38 @@ def http_send_post(url, payload):
 
 if __name__ == "__main__":
 
+    log_path = '/media/card/tracker/'
+    file_name = 'tracker_log.csv'
+    file_path = os.path.join(log_path, file_name)
+    fff = open(file_path, 'a')
+    fff.write("count, uuid, time, lat, lng, elevation\n")
+    fff.close()
     ser = setup_serial()
     uuid = '107639e9-043f-42a5-826d-32cc920667ae'
 
     handle_commands(ser, gps_setup())
     handle_commands(ser, www_open_connection())
 
-    count = 2
-    while count:
+    count = 3600
+    for i in range(count):
 
         word, bytes_sent = handle_commands(ser, gps_get_point())
-        time, lat, lng, el = gps_get_data(word)
-        time = gps_format_datetime(time)
-        url = 'http://ec2-52-35-206-130.us-west-2.compute.amazonaws.com/device/data/create'
-        payload = 'uuid={}&time={}&lat={}&lng={}&elevation={}'.format(uuid, time, lat, lng, el)
-        print('\n\nPayload: {}\n\n'.format(payload))
-        handle_commands(ser, http_send_post(url, payload))
-        sleep(20)
-        count -= 1
+        time, lat, lng, el, valid_gps = gps_get_data(word)
+        if valid_gps:
+
+            time = gps_format_datetime(time)
+            url = 'http://ec2-54-191-114-88.us-west-2.compute.amazonaws.com/device/data/create'
+            payload = 'uuid={}&time={}&lat={}&lng={}&elevation={}'.format(uuid, time, lat, lng, el)
+            print('\n\nPayload: {}'.format(payload))
+            print('Count: {}\n\n'.format(count))
+            handle_commands(ser, http_send_post(url, payload))
+            print("Logging dat to file")
+            fff = open(file_path, 'a')
+            fff.write("{},{},{},{},{},{}\n".format(i, uuid, time, lat, lng, el))
+            fff.close()
+        else:
+            print("\nNo GPS count: {}\n".format(i))
+        sleep(1)
 
     handle_commands(ser, www_close_connection())
     close_serial(ser)

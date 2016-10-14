@@ -5,7 +5,7 @@ from time import sleep
 
 def setup_serial():
     """ Setup serial connection """
-    ser = Serial(port="/dev/ttyO2", baudrate=9600, timeout=0)
+    ser = Serial(port="/dev/ttyO2", baudrate=57600, timeout=1)
     ser.close()
     sleep(0.1)
     ser.open()
@@ -25,14 +25,20 @@ def close_serial(ser):
 
 
 def gps_get_data(word):
-    """parse and return just the data we want"""
+    """Parse the CGNSINF response and return: time, lat, lng, elevation
+        in a HTTP REST request format"""
+    valid_gps = True
     sw = word.split(':')
     sw = sw[1].split('\r\n')
     sw = sw[0].split(',', )
-    sw[3] = str(sw[3]).replace('.', '%2E')
-    sw[4] = str(sw[4]).replace('.', '%2E')
-    sw[5] = str(sw[5]).replace('.', '%2E')
-    return sw[2], sw[3], sw[4], sw[5]
+    for i in range(3, 6):
+        if sw[i] == '':
+            sw[i] = 0
+            valid_gps = False
+        else:
+            sw[i] = str(sw[i]).replace('.', '%2E')
+
+    return sw[2], sw[3], sw[4], sw[5], valid_gps
 
 
 def gps_parse_raw(word):
@@ -91,19 +97,19 @@ def send_command(ser, com):
         sleep(0.1)
         while True:
             data = ser.readline()
+            print('Data: {}'.format(data))
             sleep(0.1)
             if data == '':
                 break
             response += data
-        return response, bytes_sent
+
+    return response, bytes_sent
 
 
 def handle_commands(ser, commands):
     for com in commands:
         sleep(.5)
         response = send_command(ser, com)
-        print(response)
-
         count = 1
         while count:
             if com == 'AT+HTTPREAD':
@@ -111,9 +117,7 @@ def handle_commands(ser, commands):
                 sleep(3)
                 response = send_command(ser, 'AT+HTTPREAD')
                 print('Index of ACTION: {}'.format(response[0].find('ACTION:')))
-                print(response)
                 count -= 1
-
             else:
                 break
 
@@ -122,6 +126,5 @@ def handle_commands(ser, commands):
                 sleep(1)
                 print("Resending command: {}".format(com))
                 response = send_command(ser, com)
-                print(response)
 
     return response

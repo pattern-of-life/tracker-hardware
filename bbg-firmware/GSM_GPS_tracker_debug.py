@@ -46,6 +46,7 @@ if __name__ == "__main__":
     log_path = '/media/card/tracker/'
     file_name = 'tracker_log.csv'
     debug_log = 'tracker_debug.txt'
+    global LOG_FILE
     LOG_FILE = os.path.join(log_path, debug_log)
     file_path = os.path.join(log_path, file_name)
     fff = open(file_path, 'a')

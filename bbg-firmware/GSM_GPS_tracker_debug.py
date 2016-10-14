@@ -76,7 +76,7 @@ if __name__ == "__main__":
             fff.close()
         else:
             print("\nNo GPS count: {}\n".format(i))
-        sleep(1)
+        sleep(10)
 
     handle_commands(ser, www_close_connection())
     close_serial(ser)

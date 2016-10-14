@@ -1,7 +1,13 @@
 """ FONA SIM808 library"""
 from serial import Serial
+import os
 from time import sleep
 import datetime
+
+log_path = '/media/card/tracker/'
+debug_log = 'tracker_debug.txt'
+global LOG_FILE
+LOG_FILE = os.path.join(log_path, debug_log)
 
 
 def setup_serial():

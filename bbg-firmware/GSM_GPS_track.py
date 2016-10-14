@@ -55,7 +55,7 @@ if __name__ == "__main__":
     handle_commands(ser, gps_setup())
     handle_commands(ser, www_open_connection())
 
-    count = 120
+    count = 3600
     for i in range(count):
 
         word, bytes_sent = handle_commands(ser, gps_get_point())
@@ -74,7 +74,7 @@ if __name__ == "__main__":
             fff.close()
         else:
             print("\nNo GPS count: {}\n".format(i))
-        sleep(20)
+        sleep(1)
 
     handle_commands(ser, www_close_connection())
     close_serial(ser)

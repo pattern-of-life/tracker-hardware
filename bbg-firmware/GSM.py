@@ -27,16 +27,17 @@ def close_serial(ser):
 def gps_get_data(word):
     """Parse the CGNSINF response and return: time, lat, lng, elevation
         in a HTTP REST request format"""
-    valid_gps = False
+    valid_gps = True
     sw = word.split(':')
     sw = sw[1].split('\r\n')
     sw = sw[0].split(',', )
     for i in range(3, 6):
         if sw[i] == '':
             sw[i] = 0
+            valid_gps = False
         else:
             sw[i] = str(sw[i]).replace('.', '%2E')
-            valid_gps = True
+
     return sw[2], sw[3], sw[4], sw[5], valid_gps
 
 
@@ -102,7 +103,6 @@ def send_command(ser, com):
                 break
             response += data
 
-    # print('Response: {}'.format(response))
     return response, bytes_sent
 
 
@@ -110,8 +110,6 @@ def handle_commands(ser, commands):
     for com in commands:
         sleep(.5)
         response = send_command(ser, com)
-        # print(response)
-
         count = 1
         while count:
             if com == 'AT+HTTPREAD':
@@ -119,9 +117,7 @@ def handle_commands(ser, commands):
                 sleep(3)
                 response = send_command(ser, 'AT+HTTPREAD')
                 print('Index of ACTION: {}'.format(response[0].find('ACTION:')))
-                # print(response)
                 count -= 1
-
             else:
                 break
 
@@ -130,6 +126,5 @@ def handle_commands(ser, commands):
                 sleep(1)
                 print("Resending command: {}".format(com))
                 response = send_command(ser, com)
-                # print(response)
 
     return response

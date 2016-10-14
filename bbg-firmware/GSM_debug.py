@@ -110,11 +110,11 @@ def send_command(ser, com):
 
     if ser.isOpen():
         bytes_sent = ser.write(com + b'\n')
-        log_data(LOG_FILE, 'TX: {}'.format(bytes_sent))
+        log_data(LOG_FILE, 'TX: {}\n'.format(bytes_sent))
         sleep(0.1)
         while True:
             data = ser.readline()
-            log_data(LOG_FILE, 'RX: {}'.format(data))
+            log_data(LOG_FILE, 'RX: {}\n'.format(data))
             print('Data: {}'.format(data))
             sleep(0.05)
             if data == '':

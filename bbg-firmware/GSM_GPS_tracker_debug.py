@@ -2,7 +2,7 @@ from serial import Serial
 from time import sleep
 from GSM_debug import setup_serial, send_command, close_serial
 from GSM_debug import handle_commands, gps_setup, gps_get_data, gps_get_point
-from GSM_debug import gps_format_datetime
+from GSM_debug import gps_format_datetime, send_command
 import os
 
 
